@@ -1,4 +1,4 @@
-import { motion, useTransform, useViewportScroll } from "framer-motion";
+import { motion, useTransform, useScroll } from "framer-motion";
 import { useState } from "react";
 import { Link, useMatch } from "react-router-dom";
 import styled from "styled-components";
@@ -94,7 +94,7 @@ const Input = styled(motion.input)`
 `;
 
 const Header = () => {
-  const { scrollY } = useViewportScroll();
+  const { scrollY } = useScroll();
   const backgroundColor = useTransform(
     scrollY,
     [0, 300],
