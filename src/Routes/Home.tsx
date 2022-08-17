@@ -57,6 +57,25 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   height: 200px;
   color: red;
   font-size: 66px;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
+`;
+
+const Info = styled(motion.div)`
+  padding: 10px;
+  background-color: ${(prop) => prop.theme.black.lighter};
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  h4 {
+    text-align: center;
+    font-size: 18px;
+  }
 `;
 
 const rowVariants = {
@@ -69,8 +88,31 @@ const rowVariants = {
   exit: { x: -window.outerWidth - 5 },
 };
 
-const offset = 6;
+const boxVariants = {
+  normal: { scale: 1 },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: {
+      type: "tween",
+      duration: 0.1,
+      delay: 0.5,
+    },
+  },
+};
+
+const infoVariants = {
+  hover: {
+    opacity: 1,
+    transition: {
+      type: "tween",
+      duration: 0.1,
+      delay: 0.5,
+    },
+  },
+};
 const Home = () => {
+  const offset = 6;
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -117,9 +159,17 @@ const Home = () => {
                     .slice(offset * index, offset * index + offset)
                     .map((movie) => (
                       <Box
+                        variants={boxVariants}
+                        whileHover="hover"
+                        initial="normal"
                         key={movie.id}
+                        transition={{ type: "tween" }}
                         bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                      />
+                      >
+                        <Info variants={infoVariants}>
+                          <h4>{movie.title}</h4>
+                        </Info>
+                      </Box>
                     ))}
                 </Row>
               }
