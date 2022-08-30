@@ -19,8 +19,21 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 
+export interface IGetPopularMoviesResult {
+  results: IMovie[];
+  total_pages: number;
+  total_results: number;
+  page: number;
+}
+
 export async function getMovies() {
   return await (
     await fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`)
+  ).json();
+}
+
+export async function getPopularMovies() {
+  return await (
+    await fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}`)
   ).json();
 }
