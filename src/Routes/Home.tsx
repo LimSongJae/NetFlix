@@ -75,22 +75,20 @@ const Home = () => {
       : popular.data?.results.find((movie) => movie.id + "" === id);
 
   const foundMovie = () => {
-    if (link === "nowPlaying") {
-      let movie = nowPlaying.data?.results.find(
-        (movie) => movie.id + "" === id
-      );
-      console.log(movie);
-      return movie;
-    } else if (link === "popular") {
-      let movie = popular.data?.results.find((movie) => movie.id + "" === id);
-      console.log(movie);
-      return movie;
+    if (link) {
+      if (link === "nowPlaying") {
+        let movie = nowPlaying.data?.results.find(
+          (movie) => movie.id + "" === id
+        );
+        console.log(movie);
+        return movie;
+      } else if (link === "popular") {
+        let movie = popular.data?.results.find((movie) => movie.id + "" === id);
+        console.log(movie);
+        return movie;
+      }
     }
-    return null;
   };
-  useEffect(() => {
-    console.log(link, id);
-  }, [link, id]);
   return (
     <Wrapper>
       {nowPlaying.isLoading ? (
@@ -214,16 +212,16 @@ const Home = () => {
                   style={{ top: setScrollY }}
                   layoutId={`${link} ${id}`}
                 >
-                  {clickMovie && (
+                  {foundMovie() && (
                     <>
                       <BigCover
                         imagePath={makeImagePath(
-                          clickMovie.backdrop_path,
+                          foundMovie()?.backdrop_path as string,
                           "w500"
                         )}
                       />
-                      <BigTitle>{clickMovie.title}</BigTitle>
-                      <BigOverview>{clickMovie.overview}</BigOverview>
+                      <BigTitle>{foundMovie()?.title}</BigTitle>
+                      <BigOverview>{foundMovie()?.overview}</BigOverview>
                     </>
                   )}
                 </BigMovie>
