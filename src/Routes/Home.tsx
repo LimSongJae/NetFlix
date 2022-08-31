@@ -4,21 +4,18 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useQuery } from "react-query";
 import { useMatch, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
-  getMovies,
-  getPopularMovies,
-  getSimilarMovies,
-  getUpComingMovies,
   IGetMoviesResult,
   IGetPopularMoviesResult,
   IGetSimilarMovies,
   IGetUpComingMovies,
+  IMovie,
 } from "../api";
 import { makeImagePath } from "../utils";
 import SliderBox from "../Components/SliderBox";
+import useMovie from "../hooks/useMovie";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -27,44 +24,31 @@ const Home = () => {
   const onOverlayClick = () => navigate(-1);
   const { scrollY } = useScroll();
   const setScrollY = useTransform(scrollY, (value) => value + 100);
-
-  const nowPlaying = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
-    getMovies
-  );
-  const popular = useQuery<IGetPopularMoviesResult>(
-    ["movies", "nowPopular"],
-    getPopularMovies
-  );
-  const upComing = useQuery<IGetUpComingMovies>(
-    ["movies", "upComing"],
-    getUpComingMovies
-  );
-  const similar = useQuery<IGetSimilarMovies>(
-    ["movies", "similar"],
-    getSimilarMovies
-  );
-
+  const { movies } = useMovie();
   const foundMovie = () => {
     if (link) {
       if (link === "nowPlaying") {
-        let movie = nowPlaying.data?.results.find(
-          (movie) => movie.id + "" === id
+        let movie = movies[0].data?.results.find(
+          (movie: IMovie) => movie.id + "" === id
+        );
+        console.log(movies);
+        return movie;
+      } else if (link === "popular") {
+        let movie = movies[1].data?.results.find(
+          (movie: IMovie) => movie.id + "" === id
         );
         console.log(movie);
         return movie;
-      } else if (link === "popular") {
-        let movie = popular.data?.results.find((movie) => movie.id + "" === id);
-        console.log(movie);
-        return movie;
       } else if (link === "upComing") {
-        let movie = upComing.data?.results.find(
-          (movie) => movie.id + "" === id
+        let movie = movies[2].data?.results.find(
+          (movie: IMovie) => movie.id + "" === id
         );
         console.log(movie);
         return movie;
       } else if (link === "similar") {
-        let movie = similar.data?.results.find((movie) => movie.id + "" === id);
+        let movie = movies[3].data?.results.find(
+          (movie: IMovie) => movie.id + "" === id
+        );
         console.log(movie);
         return movie;
       }
@@ -72,24 +56,24 @@ const Home = () => {
   };
   return (
     <Wrapper>
-      {nowPlaying.isLoading ? (
+      {movies[0].isLoading ? (
         <Loader>Loading</Loader>
       ) : (
         <>
           <Banner
             bgphoto={makeImagePath(
-              nowPlaying.data?.results[0].backdrop_path || ""
+              movies[0].data?.results[0].backdrop_path || ""
             )}
           >
-            <Title>{nowPlaying.data?.results[0].title}</Title>
-            <Overview>{nowPlaying.data?.results[0].overview}</Overview>
+            <Title>{movies[0].data?.results[0].title}</Title>
+            <Overview>{movies[0].data?.results[0].overview}</Overview>
           </Banner>
 
           <SliderBox
-            nowPlaying={nowPlaying.data as IGetMoviesResult}
-            popular={popular.data as IGetPopularMoviesResult}
-            upComing={upComing.data as IGetUpComingMovies}
-            similar={similar.data as IGetSimilarMovies}
+            nowPlaying={movies[0].data as IGetMoviesResult}
+            popular={movies[1].data as IGetPopularMoviesResult}
+            upComing={movies[2].data as IGetUpComingMovies}
+            similar={movies[3].data as IGetSimilarMovies}
           />
 
           <AnimatePresence>
