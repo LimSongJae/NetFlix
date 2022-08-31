@@ -4,15 +4,22 @@ import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { boxVariants, infoVariants, rowVariants } from "../Animations/Variants";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { IGetMoviesResult, IGetPopularMoviesResult } from "../api";
+import {
+  IGetMoviesResult,
+  IGetPopularMoviesResult,
+  IGetSimilarMovies,
+  IGetUpComingMovies,
+} from "../api";
 import { makeImagePath } from "../utils";
 
 interface ISliderBox {
   nowPlaying: IGetMoviesResult;
   popular: IGetPopularMoviesResult;
+  upComing: IGetUpComingMovies;
+  similar: IGetSimilarMovies;
 }
 
-const SliderBox = ({ nowPlaying, popular }: ISliderBox) => {
+const SliderBox = ({ nowPlaying, popular, upComing, similar }: ISliderBox) => {
   const increaseIndex = (
     setIndex: any,
     line?: IGetMoviesResult | IGetPopularMoviesResult
@@ -40,7 +47,6 @@ const SliderBox = ({ nowPlaying, popular }: ISliderBox) => {
       console.log(direction);
     } else return;
   };
-
   const navigate = useNavigate();
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (link: string, movieId: number) => {
@@ -49,11 +55,14 @@ const SliderBox = ({ nowPlaying, popular }: ISliderBox) => {
   const offset = 6;
   const [leaving, setLeaving] = useState(false);
   const [direction, setDirection] = useState(true);
+  const [upComingIndex, setUpComingIndex] = useState(0);
+  const [similarIndex, setSimilarIndex] = useState(0);
   const [popularIndex, setPopularIndex] = useState(0);
   const [NowPlayingIndex, setNowPlayingIndex] = useState(0);
   return (
     <>
       <Slider>
+        <SliderTitle>최신영화 Top20</SliderTitle>
         <AnimatePresence
           initial={false}
           onExitComplete={toggleLeaving}
@@ -103,6 +112,7 @@ const SliderBox = ({ nowPlaying, popular }: ISliderBox) => {
       </Slider>
 
       <Slider>
+        <SliderTitle>인기영화 Top20</SliderTitle>
         <AnimatePresence
           initial={false}
           onExitComplete={toggleLeaving}
@@ -147,14 +157,115 @@ const SliderBox = ({ nowPlaying, popular }: ISliderBox) => {
           }
         </AnimatePresence>
       </Slider>
+
+      <Slider>
+        <SliderTitle>개봉예정영화 Top20</SliderTitle>
+        <AnimatePresence
+          initial={false}
+          onExitComplete={toggleLeaving}
+          custom={direction}
+        >
+          {
+            <Row
+              variants={rowVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={{ type: "tween", duration: 1 }}
+              custom={direction}
+              key={upComingIndex}
+            >
+              {upComing?.results
+                .slice(1)
+                .slice(offset * upComingIndex, offset * upComingIndex + offset)
+                .map((movie) => (
+                  <Box
+                    layoutId={`upComing ${movie.id}`}
+                    onClick={() => onBoxClicked("upComing", movie.id)}
+                    variants={boxVariants}
+                    whileHover="hover"
+                    initial="normal"
+                    key={movie.id}
+                    transition={{ type: "tween" }}
+                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                  >
+                    <Info variants={infoVariants}>
+                      <h4>{movie.title}</h4>
+                    </Info>
+                  </Box>
+                ))}
+              <RightArrowIcon
+                onClick={() => increaseIndex(setUpComingIndex, popular)}
+              />
+              <LeftArrowIcon
+                onClick={() => decreaseIndex(setUpComingIndex, popular)}
+              />
+            </Row>
+          }
+        </AnimatePresence>
+      </Slider>
+
+      <Slider>
+        <SliderTitle>최근 본 영화와 비슷한 영화</SliderTitle>
+        <AnimatePresence
+          initial={false}
+          onExitComplete={toggleLeaving}
+          custom={direction}
+        >
+          {
+            <Row
+              variants={rowVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={{ type: "tween", duration: 1 }}
+              custom={direction}
+              key={similarIndex}
+            >
+              {similar?.results
+                .slice(1)
+                .slice(offset * similarIndex, offset * similarIndex + offset)
+                .map((movie) => (
+                  <Box
+                    layoutId={`similar ${movie.id}`}
+                    onClick={() => onBoxClicked("similar", movie.id)}
+                    variants={boxVariants}
+                    whileHover="hover"
+                    initial="normal"
+                    key={movie.id}
+                    transition={{ type: "tween" }}
+                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                  >
+                    <Info variants={infoVariants}>
+                      <h4>{movie.title}</h4>
+                    </Info>
+                  </Box>
+                ))}
+              <RightArrowIcon
+                onClick={() => increaseIndex(setSimilarIndex, popular)}
+              />
+              <LeftArrowIcon
+                onClick={() => decreaseIndex(setSimilarIndex, popular)}
+              />
+            </Row>
+          }
+        </AnimatePresence>
+      </Slider>
     </>
   );
 };
 export default SliderBox;
 
+const SliderTitle = styled.div`
+  color: white;
+  font-size: 16px;
+  margin: 0 0 15px 10px;
+  font-weight: 900;
+`;
+
 const Slider = styled.div`
   position: relative;
-  margin-bottom: 300px;
+  margin: 50px 0 250px 0;
   top: -50px;
 `;
 

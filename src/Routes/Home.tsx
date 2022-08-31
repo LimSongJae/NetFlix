@@ -10,8 +10,12 @@ import styled from "styled-components";
 import {
   getMovies,
   getPopularMovies,
+  getSimilarMovies,
+  getUpComingMovies,
   IGetMoviesResult,
   IGetPopularMoviesResult,
+  IGetSimilarMovies,
+  IGetUpComingMovies,
 } from "../api";
 import { makeImagePath } from "../utils";
 import SliderBox from "../Components/SliderBox";
@@ -20,6 +24,10 @@ const Home = () => {
   const navigate = useNavigate();
   const bigMovieMatch = useMatch(`/movies/:link/:id`);
   let { link, id } = useParams();
+  const onOverlayClick = () => navigate(-1);
+  const { scrollY } = useScroll();
+  const setScrollY = useTransform(scrollY, (value) => value + 100);
+
   const nowPlaying = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -28,9 +36,14 @@ const Home = () => {
     ["movies", "nowPopular"],
     getPopularMovies
   );
-  const onOverlayClick = () => navigate(-1);
-  const { scrollY } = useScroll();
-  const setScrollY = useTransform(scrollY, (value) => value + 100);
+  const upComing = useQuery<IGetUpComingMovies>(
+    ["movies", "upComing"],
+    getUpComingMovies
+  );
+  const similar = useQuery<IGetSimilarMovies>(
+    ["movies", "similar"],
+    getSimilarMovies
+  );
 
   const foundMovie = () => {
     if (link) {
@@ -42,6 +55,16 @@ const Home = () => {
         return movie;
       } else if (link === "popular") {
         let movie = popular.data?.results.find((movie) => movie.id + "" === id);
+        console.log(movie);
+        return movie;
+      } else if (link === "upComing") {
+        let movie = upComing.data?.results.find(
+          (movie) => movie.id + "" === id
+        );
+        console.log(movie);
+        return movie;
+      } else if (link === "similar") {
+        let movie = similar.data?.results.find((movie) => movie.id + "" === id);
         console.log(movie);
         return movie;
       }
@@ -65,6 +88,8 @@ const Home = () => {
           <SliderBox
             nowPlaying={nowPlaying.data as IGetMoviesResult}
             popular={popular.data as IGetPopularMoviesResult}
+            upComing={upComing.data as IGetUpComingMovies}
+            similar={similar.data as IGetSimilarMovies}
           />
 
           <AnimatePresence>
@@ -127,11 +152,19 @@ const Banner = styled.div<{ bgphoto: string }>`
 const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px;
+  overflow-x: hidden;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Overview = styled.p`
   font-size: 36px;
   width: 50%;
+  overflow-x: hidden;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const BigMovie = styled(motion.div)`
