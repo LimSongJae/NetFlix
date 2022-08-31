@@ -1,7 +1,7 @@
 export const rowVariants = {
   hidden: (direction: boolean) => {
     return {
-      x: direction ? window.outerWidth + 5 : -window.outerWidth - 5,
+      x: direction ? window.innerWidth : -window.innerWidth,
     };
   },
   visible: {
@@ -9,7 +9,7 @@ export const rowVariants = {
   },
   exit: (direction: boolean) => {
     return {
-      x: direction ? -window.outerWidth - 5 : window.outerWidth + 5,
+      x: direction ? -window.innerWidth : window.innerWidth,
     };
   },
 };
