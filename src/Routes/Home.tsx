@@ -16,15 +16,17 @@ import {
 import { makeImagePath } from "../utils";
 import SliderBox from "../Components/SliderBox";
 import useMovie from "../hooks/useMovie";
+import { useState } from "react";
 
 const Home = () => {
+  const [recentId, setRecentId] = useState<number>(539681);
   const navigate = useNavigate();
   const bigMovieMatch = useMatch(`/movies/:link/:id`);
   let { link, id } = useParams();
   const onOverlayClick = () => navigate(-1);
   const { scrollY } = useScroll();
   const setScrollY = useTransform(scrollY, (value) => value + 100);
-  const { movies } = useMovie();
+  const { movies } = useMovie(recentId);
   const foundMovie = () => {
     if (link) {
       if (link === "nowPlaying") {
@@ -74,6 +76,7 @@ const Home = () => {
             popular={movies[1].data as IGetPopularMoviesResult}
             upComing={movies[2].data as IGetUpComingMovies}
             similar={movies[3].data as IGetSimilarMovies}
+            setRecentId={setRecentId}
           />
 
           <AnimatePresence>

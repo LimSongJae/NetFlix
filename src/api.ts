@@ -62,8 +62,8 @@ export async function getUpComingMovies() {
   ).json();
 }
 
-export async function getSimilarMovies() {
+export async function getSimilarMovies(recentId: number) {
   return await (
-    await fetch(`${BASE_PATH}/movie/539681/similar?api_key=${API_KEY}`)
+    await fetch(`${BASE_PATH}/movie/${recentId}/similar?api_key=${API_KEY}`)
   ).json();
 }

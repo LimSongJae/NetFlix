@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { boxVariants, infoVariants, rowVariants } from "../Animations/Variants";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   IGetMoviesResult,
   IGetPopularMoviesResult,
@@ -11,17 +11,25 @@ import {
   IGetUpComingMovies,
 } from "../api";
 import { makeImagePath } from "../utils";
+import useIndex from "../hooks/useIndex";
 
 interface ISliderBox {
   nowPlaying: IGetMoviesResult;
   popular: IGetPopularMoviesResult;
   upComing: IGetUpComingMovies;
   similar: IGetSimilarMovies;
+  setRecentId: Dispatch<SetStateAction<number>>;
 }
 
-const SliderBox = ({ nowPlaying, popular, upComing, similar }: ISliderBox) => {
+const SliderBox = ({
+  nowPlaying,
+  popular,
+  upComing,
+  similar,
+  setRecentId,
+}: ISliderBox) => {
   const increaseIndex = (
-    setIndex: any,
+    setIndex: Dispatch<SetStateAction<number>>,
     line?: IGetMoviesResult | IGetPopularMoviesResult
   ) => {
     setDirection(true);
@@ -51,14 +59,23 @@ const SliderBox = ({ nowPlaying, popular, upComing, similar }: ISliderBox) => {
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (link: string, movieId: number) => {
     navigate(`/movies/${link}/${movieId}`);
+    if (link !== "similar") {
+      setRecentId(movieId);
+    }
   };
   const offset = 6;
   const [leaving, setLeaving] = useState(false);
   const [direction, setDirection] = useState(true);
-  const [upComingIndex, setUpComingIndex] = useState(0);
-  const [similarIndex, setSimilarIndex] = useState(0);
-  const [popularIndex, setPopularIndex] = useState(0);
-  const [NowPlayingIndex, setNowPlayingIndex] = useState(0);
+  const {
+    upComingIndex,
+    setUpComingIndex,
+    similarIndex,
+    setSimilarIndex,
+    popularIndex,
+    setPopularIndex,
+    NowPlayingIndex,
+    setNowPlayingIndex,
+  } = useIndex();
   return (
     <>
       <Slider>

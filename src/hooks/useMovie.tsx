@@ -6,7 +6,7 @@ import {
   getUpComingMovies,
 } from "../api";
 
-const useMovie = () => {
+const useMovie = (recentId: number) => {
   const movies = useQueries([
     {
       queryKey: ["movies", "nowPlaying"],
@@ -21,8 +21,8 @@ const useMovie = () => {
       queryFn: getUpComingMovies,
     },
     {
-      queryKey: ["movies", "similar"],
-      queryFn: getSimilarMovies,
+      queryKey: ["movies", recentId],
+      queryFn: () => getSimilarMovies(recentId),
     },
   ]);
   return { movies };
