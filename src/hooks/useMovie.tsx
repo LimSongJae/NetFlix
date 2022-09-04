@@ -3,6 +3,7 @@ import {
   getMovies,
   getPopularMovies,
   getSimilarMovies,
+  getTopRatedMovies,
   getUpComingMovies,
 } from "../api";
 
@@ -23,6 +24,10 @@ const useMovie = (recentId: number) => {
     {
       queryKey: ["movies", recentId],
       queryFn: () => getSimilarMovies(recentId),
+    },
+    {
+      queryKey: ["movies", "topRated"],
+      queryFn: getTopRatedMovies,
     },
   ]);
   return { movies };

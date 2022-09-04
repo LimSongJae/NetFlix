@@ -4,21 +4,17 @@ import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { boxVariants, infoVariants, rowVariants } from "../Animations/Variants";
 import { useNavigate } from "react-router-dom";
 import { Dispatch, SetStateAction, useState } from "react";
-import {
-  IGetMoviesResult,
-  IGetPopularMoviesResult,
-  IGetSimilarMovies,
-  IGetUpComingMovies,
-} from "../api";
+import { IMovieResult } from "../api";
 import { makeImagePath } from "../utils";
 import useIndex from "../hooks/useIndex";
 
 interface ISliderBox {
-  nowPlaying: IGetMoviesResult;
-  popular: IGetPopularMoviesResult;
-  upComing: IGetUpComingMovies;
-  similar: IGetSimilarMovies;
+  nowPlaying: IMovieResult;
+  popular: IMovieResult;
+  upComing: IMovieResult;
+  similar: IMovieResult;
   setRecentId: Dispatch<SetStateAction<number>>;
+  topRated: IMovieResult;
 }
 
 const SliderBox = ({
@@ -27,10 +23,11 @@ const SliderBox = ({
   upComing,
   similar,
   setRecentId,
+  topRated,
 }: ISliderBox) => {
   const increaseIndex = (
     setIndex: Dispatch<SetStateAction<number>>,
-    line?: IGetMoviesResult | IGetPopularMoviesResult
+    line?: IMovieResult
   ) => {
     setDirection(true);
     if (line) {
@@ -42,8 +39,8 @@ const SliderBox = ({
     } else return;
   };
   const decreaseIndex = (
-    setIndex: any,
-    line?: IGetMoviesResult | IGetPopularMoviesResult
+    setIndex: Dispatch<SetStateAction<number>>,
+    line?: IMovieResult
   ) => {
     setDirection(false);
     if (line) {
@@ -73,8 +70,10 @@ const SliderBox = ({
     setSimilarIndex,
     popularIndex,
     setPopularIndex,
-    NowPlayingIndex,
+    nowPlayingIndex,
     setNowPlayingIndex,
+    topRatedIndex,
+    setTopRatedIndex,
   } = useIndex();
   return (
     <>
@@ -93,13 +92,13 @@ const SliderBox = ({
               exit="exit"
               transition={{ type: "tween", duration: 1 }}
               custom={direction}
-              key={NowPlayingIndex}
+              key={nowPlayingIndex}
             >
               {nowPlaying?.results
                 .slice(1)
                 .slice(
-                  offset * NowPlayingIndex,
-                  offset * NowPlayingIndex + offset
+                  offset * nowPlayingIndex,
+                  offset * nowPlayingIndex + offset
                 )
                 .map((movie) => (
                   <Box
@@ -263,6 +262,53 @@ const SliderBox = ({
               />
               <LeftArrowIcon
                 onClick={() => decreaseIndex(setSimilarIndex, popular)}
+              />
+            </Row>
+          }
+        </AnimatePresence>
+      </Slider>
+
+      <Slider>
+        <SliderTitle>역대 인기 영화 TOP 20</SliderTitle>
+        <AnimatePresence
+          initial={false}
+          onExitComplete={toggleLeaving}
+          custom={direction}
+        >
+          {
+            <Row
+              variants={rowVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={{ type: "tween", duration: 1 }}
+              custom={direction}
+              key={topRatedIndex}
+            >
+              {topRated?.results
+                .slice(1)
+                .slice(offset * topRatedIndex, offset * topRatedIndex + offset)
+                .map((movie) => (
+                  <Box
+                    layoutId={`topRated ${movie.id}`}
+                    onClick={() => onBoxClicked("topRated", movie.id)}
+                    variants={boxVariants}
+                    whileHover="hover"
+                    initial="normal"
+                    key={movie.id}
+                    transition={{ type: "tween" }}
+                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                  >
+                    <Info variants={infoVariants}>
+                      <h4>{movie.title}</h4>
+                    </Info>
+                  </Box>
+                ))}
+              <RightArrowIcon
+                onClick={() => increaseIndex(setTopRatedIndex, popular)}
+              />
+              <LeftArrowIcon
+                onClick={() => decreaseIndex(setTopRatedIndex, popular)}
               />
             </Row>
           }

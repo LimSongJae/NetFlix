@@ -6,13 +6,7 @@ import {
 } from "framer-motion";
 import { useMatch, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import {
-  IGetMoviesResult,
-  IGetPopularMoviesResult,
-  IGetSimilarMovies,
-  IGetUpComingMovies,
-  IMovie,
-} from "../api";
+import { IMovie, IMovieResult } from "../api";
 import { makeImagePath } from "../utils";
 import SliderBox from "../Components/SliderBox";
 import useMovie from "../hooks/useMovie";
@@ -53,6 +47,12 @@ const Home = () => {
         );
         console.log(movie);
         return movie;
+      } else if (link === "topRated") {
+        let movie = movies[4].data?.results.find(
+          (movie: IMovie) => movie.id + "" === id
+        );
+        console.log(movie);
+        return movie;
       }
     }
   };
@@ -72,11 +72,12 @@ const Home = () => {
           </Banner>
 
           <SliderBox
-            nowPlaying={movies[0].data as IGetMoviesResult}
-            popular={movies[1].data as IGetPopularMoviesResult}
-            upComing={movies[2].data as IGetUpComingMovies}
-            similar={movies[3].data as IGetSimilarMovies}
+            nowPlaying={movies[0].data as IMovieResult}
+            popular={movies[1].data as IMovieResult}
+            upComing={movies[2].data as IMovieResult}
+            similar={movies[3].data as IMovieResult}
             setRecentId={setRecentId}
+            topRated={movies[4].data as IMovieResult}
           />
 
           <AnimatePresence>
