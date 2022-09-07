@@ -45,3 +45,11 @@ export async function getTopRatedMovies() {
     await fetch(`${BASE_PATH}/movie/top_rated/?api_key=${API_KEY}`)
   ).json();
 }
+
+export async function searchMovies(keyword: string) {
+  return await (
+    await fetch(
+      `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}&language=en-US&page=3&include_adult=true`
+    )
+  ).json();
+}

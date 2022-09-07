@@ -340,7 +340,7 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string }>`
+export const Box = styled(motion.div)<{ bgphoto: string }>`
   background-color: white;
   background-image: url(${(prop) => prop.bgphoto});
   background-size: cover;
@@ -357,7 +357,7 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
   }
 `;
 
-const Info = styled(motion.div)`
+export const Info = styled(motion.div)`
   padding: 10px;
   background-color: ${(prop) => prop.theme.black.lighter};
   opacity: 0;

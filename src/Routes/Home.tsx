@@ -176,7 +176,7 @@ const Overlay = styled(motion.div)`
   opacity: 0;
 `;
 
-const BigCover = styled.div<{ imagePath: string }>`
+export const BigCover = styled.div<{ imagePath: string }>`
   width: 100%;
   height: 400px;
   background-size: cover;
@@ -185,7 +185,7 @@ const BigCover = styled.div<{ imagePath: string }>`
     url(${(prop) => prop.imagePath});
 `;
 
-const BigTitle = styled.h3`
+export const BigTitle = styled.h3`
   color: ${(prop) => prop.theme.white.lighter};
   padding: 20px;
   font-size: 46px;
@@ -193,7 +193,7 @@ const BigTitle = styled.h3`
   top: -80px;
 `;
 
-const BigOverview = styled.p`
+export const BigOverview = styled.p`
   padding: 20px;
   position: relative;
   top: -80px;
