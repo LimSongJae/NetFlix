@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import {
   useLocation,
@@ -68,7 +68,7 @@ const Search = () => {
                   )}
                 />
                 <BigTitle>{foundMovie()?.title}</BigTitle>
-                <BigOverview>{foundMovie()?.overview}</BigOverview>
+                <BigOverview length={foundMovie()?.overview.length as number}>{foundMovie()?.overview}</BigOverview>
               </>
             </ModalBox>
             <Overlay

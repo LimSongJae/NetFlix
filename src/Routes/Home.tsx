@@ -97,7 +97,9 @@ const Home = () => {
                         )}
                       />
                       <BigTitle>{foundMovie()?.title}</BigTitle>
-                      <BigOverview>{foundMovie()?.overview}</BigOverview>
+                      <BigOverview length={foundMovie()?.overview.length}>
+                        {foundMovie()?.overview}
+                      </BigOverview>
                     </>
                   )}
                 </BigMovie>
@@ -188,8 +190,9 @@ export const BigTitle = styled.h3`
   top: -80px;
 `;
 
-export const BigOverview = styled.p`
+export const BigOverview = styled.p<{ length: number }>`
   padding: 20px;
+  font-size: ${(prop) => (prop.length < 350 ? `18px` : `12px`)};
   position: relative;
   top: -80px;
   color: ${(prop) => prop.theme.white.lighter};
