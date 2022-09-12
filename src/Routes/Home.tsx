@@ -56,6 +56,7 @@ const Home = () => {
       }
     }
   };
+  console.log(movies);
   return (
     <Wrapper>
       {movies[0].isLoading ? (
@@ -141,18 +142,12 @@ const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px;
   overflow-x: hidden;
-  ::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const Overview = styled.p`
   font-size: 36px;
   width: 50%;
   overflow-x: hidden;
-  ::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const BigMovie = styled(motion.div)`

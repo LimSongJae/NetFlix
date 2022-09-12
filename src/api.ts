@@ -46,10 +46,10 @@ export async function getTopRatedMovies() {
   ).json();
 }
 
-export async function searchMovies(keyword: string) {
+export async function searchMovies(keyword: string, page: number) {
   return await (
     await fetch(
-      `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}&language=en-US&page=3&include_adult=true`
+      `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}&language=en-US&page=${page}&include_adult=false`
     )
   ).json();
 }

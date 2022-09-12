@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
   useLocation,
@@ -10,31 +10,27 @@ import {
 import styled from "styled-components";
 import { boxVariants, infoVariants } from "../Animations/Variants";
 import { IMovieResult, searchMovies } from "../api";
-import { Box, Info } from "../Components/SliderBox";
+import Pagination from "../Components/Pagination";
+import { Info } from "../Components/SliderBox";
 import { makeImagePath } from "../utils";
 import { BigCover, BigOverview, BigTitle } from "./Home";
 
 const Search = () => {
+  const [page, setPage] = useState(1);
   const location = useLocation();
   const navigate = useNavigate();
   const onOverlayClick = () => navigate(-1);
-
   const query = new URLSearchParams(location.search);
   const keyword = query.get("keyword");
   const movieModalMatch = useMatch(`/search/:id`);
   const { id } = useParams();
-
-  const { data } = useQuery<IMovieResult>(["searchMovies", keyword], () =>
-    searchMovies(keyword as string)
+  const { data } = useQuery<IMovieResult>(["searchMovies", keyword, page], () =>
+    searchMovies(keyword as string, page)
   );
 
   const CardClicked = (id: number) => {
     navigate(`/search/${id}?keyword=${keyword}`);
   };
-  useEffect(() => {
-    console.log(data);
-    console.log(movieModalMatch);
-  }, [movieModalMatch]);
 
   const foundMovie = () => {
     let movie = data?.results.find((movie) => movie.id === Number(id));
@@ -43,7 +39,7 @@ const Search = () => {
   return (
     <Wrapper>
       <Rows>
-        {data?.results.slice(2).map((item) => (
+        {data?.results.map((item) => (
           <Card
             key={item.id}
             bgphoto={makeImagePath(item.backdrop_path, "w500")}
@@ -83,6 +79,7 @@ const Search = () => {
           </>
         ) : null}
       </AnimatePresence>
+      <Pagination page={page} setPage={setPage} />
     </Wrapper>
   );
 };
@@ -110,12 +107,12 @@ const Overlay = styled(motion.div)`
 `;
 const Rows = styled.div`
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: center;
 `;
 const Wrapper = styled.div`
   width: 100%;
-  margin-top: 100px;
+  margin-top: 150px;
 `;
 
 const Card = styled(motion.div)<{ bgphoto: string }>`
@@ -126,12 +123,12 @@ const Card = styled(motion.div)<{ bgphoto: string }>`
   background-position: center;
   height: 165px;
   border-radius: 15px;
-  margin-bottom: 25px;
+  margin: 0 5px 35px 5px;
   cursor: pointer;
-  &:nth-child(6n + 1) {
+  &:nth-child(5n + 1) {
     transform-origin: center left;
   }
-  &:nth-child(6n) {
+  &:nth-child(5n) {
     transform-origin: center right;
   }
 `;

@@ -94,28 +94,32 @@ const SliderBox = ({
               custom={direction}
               key={nowPlayingIndex}
             >
-              {nowPlaying?.results
-                .slice(1)
-                .slice(
-                  offset * nowPlayingIndex,
-                  offset * nowPlayingIndex + offset
-                )
-                .map((movie) => (
-                  <Box
-                    layoutId={`nowPlaying ${movie.id}`}
-                    onClick={() => onBoxClicked("nowPlaying", movie.id)}
-                    variants={boxVariants}
-                    whileHover="hover"
-                    initial="normal"
-                    key={movie.id}
-                    transition={{ type: "tween" }}
-                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                  >
-                    <Info variants={infoVariants}>
-                      <h4>{movie.title}</h4>
-                    </Info>
-                  </Box>
-                ))}
+              {nowPlaying ? (
+                nowPlaying?.results
+                  .slice(1)
+                  .slice(
+                    offset * nowPlayingIndex,
+                    offset * nowPlayingIndex + offset
+                  )
+                  .map((movie) => (
+                    <Box
+                      layoutId={`nowPlaying ${movie.id}`}
+                      onClick={() => onBoxClicked("nowPlaying", movie.id)}
+                      variants={boxVariants}
+                      whileHover="hover"
+                      initial="normal"
+                      key={movie.id}
+                      transition={{ type: "tween" }}
+                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
+                  ))
+              ) : (
+                <Loading>데이터를 로드중입니다...</Loading>
+              )}
               <RightArrowIcon
                 onClick={() => increaseIndex(setNowPlayingIndex, nowPlaying)}
               />
@@ -144,25 +148,29 @@ const SliderBox = ({
               custom={direction}
               key={popularIndex}
             >
-              {popular?.results
-                .slice(1)
-                .slice(offset * popularIndex, offset * popularIndex + offset)
-                .map((movie) => (
-                  <Box
-                    layoutId={`popular ${movie.id}`}
-                    onClick={() => onBoxClicked("popular", movie.id)}
-                    variants={boxVariants}
-                    whileHover="hover"
-                    initial="normal"
-                    key={movie.id}
-                    transition={{ type: "tween" }}
-                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                  >
-                    <Info variants={infoVariants}>
-                      <h4>{movie.title}</h4>
-                    </Info>
-                  </Box>
-                ))}
+              {popular ? (
+                popular?.results
+                  .slice(1)
+                  .slice(offset * popularIndex, offset * popularIndex + offset)
+                  .map((movie) => (
+                    <Box
+                      layoutId={`popular ${movie.id}`}
+                      onClick={() => onBoxClicked("popular", movie.id)}
+                      variants={boxVariants}
+                      whileHover="hover"
+                      initial="normal"
+                      key={movie.id}
+                      transition={{ type: "tween" }}
+                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
+                  ))
+              ) : (
+                <Loading>데이터를 로드중입니다...</Loading>
+              )}
               <RightArrowIcon
                 onClick={() => increaseIndex(setPopularIndex, popular)}
               />
@@ -191,25 +199,32 @@ const SliderBox = ({
               custom={direction}
               key={upComingIndex}
             >
-              {upComing?.results
-                .slice(1)
-                .slice(offset * upComingIndex, offset * upComingIndex + offset)
-                .map((movie) => (
-                  <Box
-                    layoutId={`upComing ${movie.id}`}
-                    onClick={() => onBoxClicked("upComing", movie.id)}
-                    variants={boxVariants}
-                    whileHover="hover"
-                    initial="normal"
-                    key={movie.id}
-                    transition={{ type: "tween" }}
-                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                  >
-                    <Info variants={infoVariants}>
-                      <h4>{movie.title}</h4>
-                    </Info>
-                  </Box>
-                ))}
+              {upComing ? (
+                upComing?.results
+                  .slice(1)
+                  .slice(
+                    offset * upComingIndex,
+                    offset * upComingIndex + offset
+                  )
+                  .map((movie) => (
+                    <Box
+                      layoutId={`upComing ${movie.id}`}
+                      onClick={() => onBoxClicked("upComing", movie.id)}
+                      variants={boxVariants}
+                      whileHover="hover"
+                      initial="normal"
+                      key={movie.id}
+                      transition={{ type: "tween" }}
+                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
+                  ))
+              ) : (
+                <Loading>데이터를 로드중입니다...</Loading>
+              )}
               <RightArrowIcon
                 onClick={() => increaseIndex(setUpComingIndex, popular)}
               />
@@ -238,25 +253,29 @@ const SliderBox = ({
               custom={direction}
               key={similarIndex}
             >
-              {similar?.results
-                .slice(1)
-                .slice(offset * similarIndex, offset * similarIndex + offset)
-                .map((movie) => (
-                  <Box
-                    layoutId={`similar ${movie.id}`}
-                    onClick={() => onBoxClicked("similar", movie.id)}
-                    variants={boxVariants}
-                    whileHover="hover"
-                    initial="normal"
-                    key={movie.id}
-                    transition={{ type: "tween" }}
-                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                  >
-                    <Info variants={infoVariants}>
-                      <h4>{movie.title}</h4>
-                    </Info>
-                  </Box>
-                ))}
+              {similar ? (
+                similar?.results
+                  .slice(1)
+                  .slice(offset * similarIndex, offset * similarIndex + offset)
+                  .map((movie) => (
+                    <Box
+                      layoutId={`similar ${movie.id}`}
+                      onClick={() => onBoxClicked("similar", movie.id)}
+                      variants={boxVariants}
+                      whileHover="hover"
+                      initial="normal"
+                      key={movie.id}
+                      transition={{ type: "tween" }}
+                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
+                  ))
+              ) : (
+                <Loading>데이터를 로드중입니다...</Loading>
+              )}
               <RightArrowIcon
                 onClick={() => increaseIndex(setSimilarIndex, popular)}
               />
@@ -285,25 +304,32 @@ const SliderBox = ({
               custom={direction}
               key={topRatedIndex}
             >
-              {topRated?.results
-                .slice(1)
-                .slice(offset * topRatedIndex, offset * topRatedIndex + offset)
-                .map((movie) => (
-                  <Box
-                    layoutId={`topRated ${movie.id}`}
-                    onClick={() => onBoxClicked("topRated", movie.id)}
-                    variants={boxVariants}
-                    whileHover="hover"
-                    initial="normal"
-                    key={movie.id}
-                    transition={{ type: "tween" }}
-                    bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                  >
-                    <Info variants={infoVariants}>
-                      <h4>{movie.title}</h4>
-                    </Info>
-                  </Box>
-                ))}
+              {topRated ? (
+                topRated?.results
+                  .slice(1)
+                  .slice(
+                    offset * topRatedIndex,
+                    offset * topRatedIndex + offset
+                  )
+                  .map((movie) => (
+                    <Box
+                      layoutId={`topRated ${movie.id}`}
+                      onClick={() => onBoxClicked("topRated", movie.id)}
+                      variants={boxVariants}
+                      whileHover="hover"
+                      initial="normal"
+                      key={movie.id}
+                      transition={{ type: "tween" }}
+                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
+                  ))
+              ) : (
+                <Loading>데이터를 로드중입니다...</Loading>
+              )}
               <RightArrowIcon
                 onClick={() => increaseIndex(setTopRatedIndex, popular)}
               />
@@ -318,6 +344,15 @@ const SliderBox = ({
   );
 };
 export default SliderBox;
+
+const Loading = styled.div`
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 45px;
+  font-size: 12px;
+`;
 
 const SliderTitle = styled.div`
   color: white;
